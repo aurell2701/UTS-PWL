@@ -1,0 +1,68 @@
+<div class="bg-white p-6 rounded-2xl shadow">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-xl font-bold">Data Mahasiswa</h2>
+    <a href="/mahasiswa/create" class="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600">
+      + Tambah Mahasiswa
+    </a>
+  </div>
+
+  <table class="w-full text-left border-collapse">
+    <thead>
+      <tr class="bg-gray-100">
+        <th class="p-3 border text-center">No</th>
+        <th class="p-3 border">Nama</th>
+        <th class="p-3 border">NIM</th>
+        <th class="p-3 border text-center">Aksi</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (mahasiswa && mahasiswa.length > 0) { %>
+        <% mahasiswa.forEach((m, index) => { %>
+          <tr class="hover:bg-gray-50">
+            <td class="p-3 border text-center"><%= index + 1 %></td>
+            <td class="p-3 border"><%= m.nama %></td>
+            <td class="p-3 border"><%= m.nim %></td>
+            <td class="p-3 border text-center">
+              <a href="/mahasiswa/edit/<%= m.id %>" class="text-yellow-600 font-bold hover:underline">Edit</a>
+              <span class="mx-2 text-gray-300">|</span>
+              <button type="button" onclick="confirmDelete('<%= m.id %>')" class="text-red-600 font-bold hover:underline">
+                Hapus
+              </button>
+            </td>
+          </tr>
+        <% }) %>
+      <% } else { %>
+        <tr>
+          <td colspan="4" class="p-5 text-center text-gray-500 italic">Belum ada data mahasiswa.</td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  function confirmDelete(id) {
+    Swal.fire({
+      title: 'Yakin?',
+      text: "Data akan dihapus permanen!",
+      icon: 'warning',
+      showCancelButton: true,
+      
+      // Tombol Batal (Kiri)
+      cancelButtonText: 'Cancel',
+      cancelButtonColor: '#6b7280', // Abu-abu
+      
+      // Tombol Konfirmasi (Kanan)
+      confirmButtonText: 'Ya, hapus!',
+      confirmButtonColor: '#ef4444', // Merah
+      
+      // Set ke false agar Konfirmasi di Kanan, Cancel di Kiri
+      reverseButtons: false 
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Panggil URL hapus sesuai route kamu
+        window.location.href = "/mahasiswa/delete/" + id;
+      }
+    })
+  }
+</script>

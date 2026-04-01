@@ -1,0 +1,45 @@
+<div class="bg-white p-6 rounded-2xl shadow max-w-lg">
+  <h2 class="text-xl font-bold mb-4">Tambah Mahasiswa</h2>
+  
+  <form onsubmit="return validateForm()" action="/mahasiswa" method="POST">
+    <input 
+      name="nama" 
+      placeholder="Nama" 
+      class="w-full mb-3 p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none" 
+    />
+    
+    <input 
+      name="nim" 
+      placeholder="NIM" 
+      class="w-full mb-3 p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none" 
+    />
+    
+    <div class="flex gap-3 mt-2">
+      <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition">
+        Simpan
+      </button>
+      
+      <a href="/mahasiswa" class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded transition text-center">
+        Kembali
+      </a>
+    </div>
+  </form>
+</div>
+
+<script>
+  function validateForm() {
+    const nama = document.querySelector('input[name="nama"]').value;
+    const nim = document.querySelector('input[name="nim"]').value;
+
+    if (!nama.trim() || !nim.trim()) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Nama dan NIM wajib diisi!',
+        confirmButtonColor: '#3b82f6'
+      });
+      return false;
+    }
+    return true;
+  }
+</script>
