@@ -1,49 +1,48 @@
-<div class="p-8 w-full min-h-screen bg-[#f8fafc]">
+<div class="p-8 w-full">
+  
   <div class="flex flex-row gap-6 mb-8">
     
-    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex-1">
+    <div class="flex-1 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
       <p class="text-gray-400 text-sm font-medium mb-1">Total Mahasiswa</p>
       <h3 class="text-4xl font-bold text-[#2563eb]"><%= totalMhs %></h3>
     </div>
 
-    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex-1">
+    <div class="flex-1 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
       <p class="text-gray-400 text-sm font-medium mb-1">Total Dosen</p>
       <h3 class="text-4xl font-bold text-[#22c55e]">35</h3>
     </div>
 
-    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex-1">
+    <div class="flex-1 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
       <p class="text-gray-400 text-sm font-medium mb-1">Total Matkul</p>
       <h3 class="text-4xl font-bold text-[#a855f7]">50</h3>
     </div>
     
   </div>
 
-  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-    <div class="p-6">
-      <h2 class="text-lg font-bold text-gray-800 mb-4">Data Mahasiswa</h2>
-      
-      <div class="overflow-hidden rounded-xl border border-gray-100">
-        <table class="w-full text-left border-collapse">
-          <thead>
-            <tr class="bg-[#f1f5f9] text-gray-700">
-              <th class="p-4 border-b font-bold text-center w-20">No</th>
-              <th class="p-4 border-b font-bold text-center border-l border-gray-200">Nama</th>
-              <th class="p-4 border-b font-bold text-center border-l border-gray-200">NIM</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% if (mahasiswa && mahasiswa.length > 0) { %>
-              <% mahasiswa.forEach((m, i) => { %>
-                <tr class="hover:bg-gray-50 transition-colors">
-                  <td class="p-4 border-b text-center font-bold text-gray-800"><%= i + 1 %></td>
-                  <td class="p-4 border-b text-center border-l border-gray-100 text-gray-700"><%= m.nama %></td>
-                  <td class="p-4 border-b text-center border-l border-gray-100 text-gray-700"><%= m.nim %></td>
-                </tr>
-              <% }) %>
-            <% } %>
-          </tbody>
-        </table>
-      </div>
+  <div class="bg-white p-8 rounded-[24px] border border-gray-100 shadow-sm">
+    <h2 class="text-lg font-bold text-gray-800 mb-6">Data Mahasiswa</h2>
+    
+    <div class="border border-gray-200 rounded-xl overflow-hidden">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-[#f1f5f9]">
+            <th class="p-4 border-b border-gray-200 font-bold text-center w-20">No</th>
+            <th class="p-4 border-b border-l border-gray-200 font-bold text-center">Nama</th>
+            <th class="p-4 border-b border-l border-gray-200 font-bold text-center">NIM</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (mahasiswa && mahasiswa.length > 0) { %>
+            <% mahasiswa.forEach((m, i) => { %>
+              <tr class="hover:bg-gray-50 transition">
+                <td class="p-4 border-b border-gray-200 text-center font-bold text-gray-800"><%= i + 1 %></td>
+                <td class="p-4 border-b border-l border-gray-200 text-center text-gray-700"><%= m.nama %></td>
+                <td class="p-4 border-b border-l border-gray-200 text-center text-gray-700"><%= m.nim %></td>
+              </tr>
+            <% }) %>
+          <% } %>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
