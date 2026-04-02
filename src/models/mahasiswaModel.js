@@ -1,39 +1,43 @@
-// Gunakan let, tapi jangan ganti referensi array-nya secara total jika memungkinkan
-let mahasiswa = [
-  { id: 1, nama: "Budi", nim: "12345" },
-];
+import prisma from "../config/prisma.js";
 
-export const getAll = () => mahasiswa;
-
-export const getById = (id) => {
-  // Pastikan perbandingan tipe data aman (==)
-  return mahasiswa.find((m) => m.id == id);
+// GET ALL
+export const getAll = async () => {
+  return await prisma.mahasiswa.findMany({
+    orderBy: { id: "asc" },
+  });
 };
 
-export const create = (data) => {
-  const newData = {
-    id: Date.now(), // ID unik berbasis waktu
-    ...data,
-  };
-  mahasiswa.push(newData);
-  return newData;
+// GET BY ID
+export const getById = async (id) => {
+  return await prisma.mahasiswa.findUnique({
+    where: { id: parseInt(id) },
+  });
 };
 
-export const update = (id, data) => {
-  const index = mahasiswa.findIndex((m) => m.id == id);
-  if (index !== -1) {
-    // Update isi array tanpa mengganti variabel 'mahasiswa'
-    mahasiswa[index] = { ...mahasiswa[index], ...data };
-    return mahasiswa[index];
-  }
-  return null;
+// CREATE
+export const create = async (data) => {
+  return await prisma.mahasiswa.create({
+    data: {
+      nama: data.nama,
+      nim: data.nim,
+    },
+  });
 };
 
-export const remove = (id) => {
-  const index = mahasiswa.findIndex((m) => m.id == id);
-  if (index !== -1) {
-    mahasiswa.splice(index, 1); // Menghapus elemen langsung dari array asli
-    return true;
-  }
-  return false;
+// UPDATE
+export const update = async (id, data) => {
+  return await prisma.mahasiswa.update({
+    where: { id: parseInt(id) },
+    data: {
+      nama: data.nama,
+      nim: data.nim,
+    },
+  });
+};
+
+// DELETE
+export const remove = async (id) => {
+  return await prisma.mahasiswa.delete({
+    where: { id: parseInt(id) },
+  });
 };

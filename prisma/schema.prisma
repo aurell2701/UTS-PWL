@@ -4,10 +4,11 @@ generator client {
 
 datasource db {
   provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 model Mahasiswa {
-  id    Int     @id @default(autoincrement())
+  id    Int    @id @default(autoincrement())
   nama  String
-  nim   String  @unique
+  nim   String @unique
 }

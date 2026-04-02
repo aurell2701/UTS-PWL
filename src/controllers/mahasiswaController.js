@@ -1,17 +1,15 @@
-import { render } from "../config/viewEngine";
-import * as model from "../models/mahasiswaModel";
+import { render } from "../config/viewEngine.js";
+import * as model from "../models/mahasiswaModel.js";
 
 // LIST
 export const index = async (c) => {
-  // Gunakan await agar data mahasiswa terambil sempurna sebelum dirender
-  const data = await model.getAll(); 
+  const data = await model.getAll();
   const success = c.req.query("success");
   const error = c.req.query("error");
-  
   return c.html(
     await render("mahasiswa/index", {
       title: "Data Mahasiswa",
-      mahasiswa: data || [], // Pastikan kirim array kosong jika data null
+      mahasiswa: data,
       success,
       error,
     }, c)
@@ -30,36 +28,31 @@ export const createForm = async (c) => {
 // STORE
 export const store = async (c) => {
   const body = await c.req.parseBody();
-  
   if (!body.nama || !body.nim) {
     return c.redirect("/mahasiswa/create?error=Semua field wajib diisi");
   }
-  
-  await model.create({
-    nama: body.nama,
-    nim: body.nim,
-  });
-  
-  return c.redirect("/mahasiswa?success=Data berhasil ditambahkan");
+  try {
+    await model.create({ nama: body.nama, nim: body.nim });
+    return c.redirect("/mahasiswa?success=Data berhasil ditambahkan");
+  } catch (e) {
+    if (e.code === "P2002") {
+      return c.redirect("/mahasiswa/create?error=NIM sudah terdaftar");
+    }
+    return c.redirect("/mahasiswa/create?error=Gagal menyimpan data");
+  }
 };
 
 // FORM EDIT
 export const editForm = async (c) => {
   const id = c.req.param("id");
-  
-  // Konversi id ke Number karena di model id: 1 (number), sedangkan di URL "1" (string)
-  const data = await model.getById(Number(id)); 
-  
-  console.log("Mencari ID:", id, "| Data ditemukan:", data);
-
+  const data = await model.getById(id);
   if (!data) {
     return c.redirect("/mahasiswa?error=Data tidak ditemukan");
   }
-  
   return c.html(
     await render("mahasiswa/edit", {
       title: "Edit Mahasiswa",
-      mhs: data, // Nama variabel 'mhs' harus sama dengan di edit.ejs
+      mhs: data,
     }, c)
   );
 };
@@ -68,28 +61,27 @@ export const editForm = async (c) => {
 export const updateData = async (c) => {
   const id = c.req.param("id");
   const body = await c.req.parseBody();
-  
   if (!body.nama || !body.nim) {
     return c.redirect(`/mahasiswa/edit/${id}?error=Field tidak boleh kosong`);
   }
-  
-  // Pastikan ID dikonversi ke Number agar cocok dengan array di model
-  const isUpdated = await model.update(Number(id), {
-    nama: body.nama,
-    nim: body.nim,
-  });
-  
-  if (isUpdated === null) {
-    return c.redirect("/mahasiswa?error=Gagal mengupdate data");
+  try {
+    await model.update(id, { nama: body.nama, nim: body.nim });
+    return c.redirect("/mahasiswa?success=Data berhasil diupdate");
+  } catch (e) {
+    if (e.code === "P2002") {
+      return c.redirect(`/mahasiswa/edit/${id}?error=NIM sudah digunakan`);
+    }
+    return c.redirect(`/mahasiswa/edit/${id}?error=Gagal mengupdate data`);
   }
-  
-  return c.redirect("/mahasiswa?success=Data berhasil diupdate");
 };
 
 // DELETE
 export const destroy = async (c) => {
   const id = c.req.param("id");
-  await model.remove(Number(id));
-  
-  return c.redirect("/mahasiswa?success=Data berhasil dihapus");
+  try {
+    await model.remove(id);
+    return c.redirect("/mahasiswa?success=Data berhasil dihapus");
+  } catch (e) {
+    return c.redirect("/mahasiswa?error=Gagal menghapus data");
+  }
 };
